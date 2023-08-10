@@ -5,13 +5,16 @@
 - Install Choco
     - Open PowerShell as Admin
     - `Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))`
+- Install Git
+    - Open PowerShell
+    - `choco install git`
 - Install Terraform
     - Open PowerShell
     - `choco install terraform`
-- Install Azure CLI
+- Install Azure CLI (Can take fuckin 30 mins?)
     - Open Powershell
     - `winget install -e --id Microsoft.AzureCLI`
-- Setup Azure with Terraform (Can take fuckin 30 mins?)
+- Setup Azure with Terraform 
     - https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build
     - Open Powershell
     - `az login`
