@@ -11,7 +11,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 locals {
-  vm_name = var.vm_name == "" ? module.naming.virtual_machine.name : var.vm_name
+  vm_name = var.vm_name == null ? format("vm-%s-%s-%s", var.workload, var.environment, var.resource_group_location): var.vm_name
 }
 
 
@@ -66,6 +66,6 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
 
   computer_name                   = local.vm_name
   disable_password_authentication = false
-  admin_username                  = var.username
-  admin_password                  = var.password
+  admin_username                  = var.vm_username
+  admin_password                  = var.vm_password
 }

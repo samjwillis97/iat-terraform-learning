@@ -6,7 +6,7 @@ variable "resource_group_location" {
 
 variable "workload" {
   type    = string
-  default = "testing"
+  default = "iat"
 }
 
 variable "environment" {
