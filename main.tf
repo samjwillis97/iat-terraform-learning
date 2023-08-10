@@ -21,3 +21,9 @@ provider "azurerm" {
 provider "azapi" {
   features {}
 }
+
+module "naming" {
+  source = "Azure/naming/azurerm"
+  suffix = [var.workload, var.environment, var.resource_group_location]
+}
+

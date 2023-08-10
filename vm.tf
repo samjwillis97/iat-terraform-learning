@@ -1,23 +1,23 @@
 # NOTES: I removed network security groups and file storage from this sample
 
 resource "azurerm_resource_group" "rg" {
+  name     = var.resource_group_name == "" ? module.naming.resource_group.name : var.resource_group_name
   location = var.resource_group_location
-  name     = var.resource_group_name
   tags = {
     source      = "terraform"
     Environment = var.environment
-    Owner       = "Sam Willis"
+    Owner       = var.author
   }
 }
 
 locals {
-  vm_name = var.vm_name == "" ? format("%s-%s-%s", "vm", var.name, var.environment) : var.vm_name
+  vm_name = var.vm_name == "" ? module.naming.virtual_machine.name : var.vm_name
 }
 
 
 # Create virtual network
 resource "azurerm_virtual_network" "my_terraform_network" {
-  name                = format("%s-%s-%s", "vn", var.name, var.environment)
+  name                = module.naming.virtual_network.name
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -25,7 +25,7 @@ resource "azurerm_virtual_network" "my_terraform_network" {
 
 # Create subnet
 resource "azurerm_subnet" "my_terraform_subnet" {
-  name                 = format("%s-%s-%s", "sbn-internal", var.name, var.environment)
+  name                 = module.naming.subnet.name
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.my_terraform_network.name
   address_prefixes     = ["10.0.1.0/24"]
@@ -33,7 +33,7 @@ resource "azurerm_subnet" "my_terraform_subnet" {
 
 # Create network interface
 resource "azurerm_network_interface" "my_terraform_nic" {
-  name                = format("%s-%s-%s", "nic", var.name, var.environment)
+  name                = module.naming.network_interface.name
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
