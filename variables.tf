@@ -12,7 +12,7 @@ variable "resource_group_name" {
 
 variable "vm_name" {
   type        = string
-  default     = "virtual-machine"
+  default     = ""
   description = "Name of the virtual machine."
 }
 
@@ -27,3 +27,14 @@ variable "password" {
   default     = null
   description = "The password for local account on the vm."
 }
+
+variable "environment" {
+  type = string
+  default = "testing"
+}
+
+variable "name" {
+  type = string
+  default = null
+}
+

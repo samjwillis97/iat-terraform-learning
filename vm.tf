@@ -3,12 +3,21 @@
 resource "azurerm_resource_group" "rg" {
   location = var.resource_group_location
   name     = var.resource_group_name
+  tags = {
+    source      = "terraform"
+    Environment = var.environment
+    Owner       = "Sam Willis"
+  }
+}
+
+locals {
+  vm_name = var.vm_name == "" ? format("%s-%s-%s", "vm", var.name, var.environment) : var.vm_name
 }
 
 
 # Create virtual network
 resource "azurerm_virtual_network" "my_terraform_network" {
-  name                = "virtual-network"
+  name                = format("%s-%s-%s", "vn", var.name, var.environment)
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -16,7 +25,7 @@ resource "azurerm_virtual_network" "my_terraform_network" {
 
 # Create subnet
 resource "azurerm_subnet" "my_terraform_subnet" {
-  name                 = "internal"
+  name                 = format("%s-%s-%s", "sbn-internal", var.name, var.environment)
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.my_terraform_network.name
   address_prefixes     = ["10.0.1.0/24"]
@@ -24,7 +33,7 @@ resource "azurerm_subnet" "my_terraform_subnet" {
 
 # Create network interface
 resource "azurerm_network_interface" "my_terraform_nic" {
-  name                = "nic"
+  name                = format("%s-%s-%s", "nic", var.name, var.environment)
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -37,7 +46,7 @@ resource "azurerm_network_interface" "my_terraform_nic" {
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
-  name                  = var.vm_name
+  name                  = local.vm_name
   location              = azurerm_resource_group.rg.location
   resource_group_name   = azurerm_resource_group.rg.name
   network_interface_ids = [azurerm_network_interface.my_terraform_nic.id]
@@ -55,7 +64,7 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
     version   = "latest"
   }
 
-  computer_name                   = var.vm_name
+  computer_name                   = local.vm_name
   disable_password_authentication = false
   admin_username                  = var.username
   admin_password                  = var.password
