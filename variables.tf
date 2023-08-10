@@ -29,12 +29,12 @@ variable "password" {
 }
 
 variable "environment" {
-  type = string
+  type    = string
   default = "testing"
 }
 
 variable "name" {
-  type = string
+  type    = string
   default = null
 }
 
