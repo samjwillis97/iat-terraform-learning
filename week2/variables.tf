@@ -19,10 +19,16 @@ variable "author" {
   default = "swillis"
 }
 
-variable "resource_group_name" {
+variable "vm_resource_group_name" {
   type        = string
-  default     = "rg-swillis-learning"
-  description = "Override name of the resource group."
+  default     = "rg-swillis-learning-vm"
+  description = "Override name of the vm resource group."
+}
+
+variable "storage_resource_group_name" {
+  type        = string
+  default     = "rg-swillis-learning-storage"
+  description = "Override name of the storage resource group."
 }
 
 variable "my_ip" {

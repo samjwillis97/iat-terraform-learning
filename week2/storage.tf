@@ -1,22 +1,16 @@
 # Create storage account
 resource "azurerm_storage_account" "my_storage_account" {
   name                     = module.naming.storage_account.name
-  location                 = azurerm_resource_group.rg.location
-  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.storage_rg.location
+  resource_group_name      = azurerm_resource_group.storage_rg.name
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  access_tier              = "Cool"
 
-  # Create Azure Storage Firewall, I think this is what is wanted
-  # Might actually want to use firewall_network_rule_collection
   network_rules {
-    default_action             = "Deny"
-    ip_rules                   = var.my_ip != null ? [var.my_ip] : []
-    virtual_network_subnet_ids = [azurerm_subnet.my_terraform_subnet.id]
+    default_action = "Deny"
+    ip_rules       = var.my_ip != null ? [var.my_ip] : []
   }
-
-  # TODO: Redundancy?
-  # TODO: Access Tiers?
-  # TODO: Only allow access from specific ip addresses
 }
 
 # Creates the storage container
@@ -30,11 +24,12 @@ resource "azurerm_storage_container" "my_storage_container" {
 
 # This adds a blob file to the storage container
 resource "azurerm_storage_blob" "my_storage_blob" {
-  name                   = "LICENSE"
+  name                   = "licenses/LICENSE"
   storage_account_name   = azurerm_storage_account.my_storage_account.name
   storage_container_name = azurerm_storage_container.my_storage_container.name
   type                   = "Block"
   source                 = "./resources/LICENSE"
+  access_tier            = "Hot"
 }
 
 # Creates the azure file share
