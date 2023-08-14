@@ -43,3 +43,7 @@ variable "vm_password" {
   description = "The password for local account on the vm."
 }
 
+variable "my_ip" {
+  type    = string
+  default = null
+}

@@ -43,9 +43,24 @@ resource "azurerm_network_security_group" "my_terraform_nsg" {
     protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "3389"
-    source_address_prefix      = "*"
+    source_address_prefixes    = concat(azurerm_subnet.my_terraform_subnet.address_prefixes, [var.my_ip])
     destination_address_prefix = "*"
   }
+}
+
+# Create Public IPs
+resource "azurerm_public_ip" "my_terraform_public_ip_1" {
+  name                = format("%s-01", module.naming.public_ip.name)
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Dynamic"
+}
+
+resource "azurerm_public_ip" "my_terraform_public_ip_2" {
+  name                = format("%s-02", module.naming.public_ip.name)
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Dynamic"
 }
 
 # Create network interfaces
@@ -58,6 +73,7 @@ resource "azurerm_network_interface" "my_terraform_nic_1" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.my_terraform_subnet.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.my_terraform_public_ip_1.id
   }
 }
 
@@ -70,12 +86,18 @@ resource "azurerm_network_interface" "my_terraform_nic_2" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.my_terraform_subnet.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.my_terraform_public_ip_2.id
   }
 }
 
-# Connect the security group to the subnet
-resource "azurerm_subnet_network_security_group_association" "example" {
-  subnet_id                 = azurerm_subnet.my_terraform_subnet.id
+# Connect the security group to the nics
+resource "azurerm_network_interface_security_group_association" "nic_security_1" {
+  network_interface_id      = azurerm_network_interface.my_terraform_nic_1.id
+  network_security_group_id = azurerm_network_security_group.my_terraform_nsg.id
+}
+
+resource "azurerm_network_interface_security_group_association" "nic_security_2" {
+  network_interface_id      = azurerm_network_interface.my_terraform_nic_2.id
   network_security_group_id = azurerm_network_security_group.my_terraform_nsg.id
 }
 
