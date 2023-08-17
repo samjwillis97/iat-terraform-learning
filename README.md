@@ -38,6 +38,7 @@ resource_group_name = "my-resource-group"
 resource_group_location = "eastus2"
 ```
 
+
 ## Terraform Workspaces
 
 - Seperate instances of state data
@@ -56,6 +57,7 @@ resource_group_location = "eastus2"
     - Password: Get from Lab
     - Public Inbound Ports: None
 
+
 ## Week 2
 
 [Lab Link](https://learn.microsoft.com/en-us/training/modules/configure-storage-security/8-simulation-storage?ns-enrollment-type=learningpath&ns-enrollment-id=learn.az-104-manage-storage)
@@ -71,3 +73,12 @@ resource_group_location = "eastus2"
 4. Manage authentication and authorization for Azure storage
 5. Create and configure an Azure File share
 6. Manage network access for Azure Storage
+
+
+## Week 3
+
+1. Virtual Network
+    - [Lab Link](https://learn.microsoft.com/en-us/training/modules/configure-virtual-networks/9-simulation-create-networks)
+    - [Lab Video](https://mslearn.cloudguides.com/en-us/guides/AZ-900%20Exam%20Guide%20-%20Azure%20Fundamentals%20Exercise%204)
+2. SQL Database
+    - [Lab Link](https://microsoftlearning.github.io/DP-900T00A-Azure-Data-Fundamentals/Instructions/Labs/dp900-01-sql-lab.htm)

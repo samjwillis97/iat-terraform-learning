@@ -5,18 +5,21 @@ variable "resource_group_location" {
 }
 
 variable "workload" {
-  type    = string
-  default = "iat"
+  type        = string
+  default     = "iat"
+  description = "Workload name for tags and naming."
 }
 
 variable "environment" {
-  type    = string
-  default = "testing"
+  type        = string
+  default     = "testing"
+  description = "Environment name for tags and naming."
 }
 
 variable "author" {
-  type    = string
-  default = "swillis"
+  type        = string
+  default     = "swillis"
+  description = "Override name of author."
 }
 
 variable "resource_group_name" {
@@ -25,7 +28,8 @@ variable "resource_group_name" {
   description = "Override name of the resource group."
 }
 
-variable "my_ip" {
-  type    = string
-  default = null
+variable "public_ip" {
+  type        = string
+  default     = null
+  description = "Override value of public ip address."
 }

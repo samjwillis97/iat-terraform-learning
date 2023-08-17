@@ -1,19 +1,3 @@
-# # Create virtual network
-# resource "azurerm_virtual_network" "network" {
-#   name                = module.naming.virtual_network.name
-#   address_space       = ["10.1.0.0/24"]
-#   location            = azurerm_resource_group.rg.location
-#   resource_group_name = azurerm_resource_group.rg.name
-# }
-# 
-# # Create subnet
-# resource "azurerm_subnet" "subnet" {
-#   name                 = module.naming.subnet.name
-#   resource_group_name  = azurerm_resource_group.rg.name
-#   virtual_network_name = azurerm_virtual_network.network.name
-#   address_prefixes     = ["10.1.0.0/24"]
-# }
-
 resource "azurerm_storage_account" "sa" {
   name                     = module.naming.storage_account.name
   resource_group_name      = azurerm_resource_group.rg.name
@@ -31,13 +15,19 @@ resource "azurerm_mssql_server" "sqlserver" {
   administrator_login_password = "4-v3ry-53cr37-p455w0rd"
 }
 
-
 resource "azurerm_mssql_database" "sqldb" {
-  name         = "AdventureWorks"
-  server_id    = azurerm_mssql_server.sqlserver.id
-  license_type = "BasePrice"
-  sample_name  = "AdventureWorksLT"
-  sku_name     = "GP_S_Gen5_2"
+  name                        = "AdventureWorks"
+  server_id                   = azurerm_mssql_server.sqlserver.id
+  sample_name                 = "AdventureWorksLT"
+  sku_name                    = "GP_S_Gen5_2"
+  min_capacity                = 1
+  auto_pause_delay_in_minutes = -1
 }
 
+resource "azurerm_mssql_firewall_rule" "sql_firewall_rule" {
+  name             = module.naming.sql_firewall_rule.name
+  server_id        = azurerm_mssql_server.sqlserver.id
+  start_ip_address = local.public_ip
+  end_ip_address   = local.public_ip
+}
 
